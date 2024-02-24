@@ -13,29 +13,41 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
-    const [mode, setMode] = useState("")
+    const [mode, setMode] = useState("");
+
+    const handleThemeChange = () => {
+        if (
+            localStorage.theme === "dark" ||
+            (!("theme" in localStorage) &&
+                window.matchMedia("prefers-color-scheme: dark").matches)
+        ) {
+            setMode("dark");
+            document.documentElement.classList.add("dark");
+        } else {
+            setMode("light");
+            document.documentElement.classList.remove("dark");
+        }
+    };
 
     useEffect(() => {
-        const handleThemeChange = () => {
-            if (mode === "dark") {
-                setMode("light")
-                document.documentElement.classList.add("light")
-            } else {
-                setMode("dark")
-                document.documentElement.classList.add("dark")
-            }
-        }
-        handleThemeChange()
-    }, [mode])
-    return <ThemeContext.Provider value={{ mode, setMode }}>{children}</ThemeContext.Provider>;
-};
+        handleThemeChange();
+    }, [mode]);
 
+
+    return (
+        <ThemeContext.Provider value={{ mode, setMode }}>
+            {children}
+        </ThemeContext.Provider>
+    );
+}
 export default ThemeProvider;
 
 export function useTheme() {
     const context = useContext(ThemeContext);
+
     if (context === undefined) {
-        throw new Error("useTheme must be used with a ThemeProvider")
+        throw new Error("useTheme must be used within a ThemeProvider");
     }
+
     return context;
 }
