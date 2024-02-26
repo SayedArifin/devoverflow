@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react'
-import RenderTag from './RenderTag';
+import RenderTag from '../../../components/shared/RenderTag';
 
 const RightSidebar = () => {
     const hotQuestions = [
