@@ -18,6 +18,7 @@ import { QuestionSchema } from "@/lib/validation"
 import React, { Suspense, useRef, useState } from 'react';
 import Image from 'next/image';
 import { Badge } from '../ui/badge';
+import { createQuestion } from '@/lib/actions/question.action';
 
 
 
@@ -33,10 +34,10 @@ const Question = ({ type }: { type: string }) => {
     })
 
     // 2. Define a submit handler.
-    function onSubmit(values: z.infer<typeof QuestionSchema>) {
+    async function onSubmit(values: z.infer<typeof QuestionSchema>) {
         setIsSubmitting(true);
         try {
-            //
+            await createQuestion({})
         } catch (error) {
 
         } finally {
